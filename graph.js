@@ -18,26 +18,40 @@ function Graph(id) {
 
         // draw grid
         this.ctx.strokeStyle = 'gray';
-        this.ctx.lineWidth = 1;
+        this.ctx.lineWidth = .5;
 
+        this.ctx.beginPath();
         for (let i = this.xRange[0]; i < this.xRange[1] + 1; i++) {
-            this.ctx.beginPath();
             this.ctx.moveTo(i * sizes[0], 0);
             this.ctx.lineTo(i * sizes[0], this.canvas.height);
             this.ctx.stroke();
-            this.ctx.closePath();
         }
 
         for (let i = this.yRange[0]; i < this.yRange[1] + 1; i++) {
-            this.ctx.beginPath();
             this.ctx.moveTo(0, i * sizes[1]);
             this.ctx.lineTo(this.canvas.width, i * sizes[1]);
             this.ctx.stroke();
-            this.ctx.closePath();
         }
+        this.ctx.closePath();
 
         // draw vectors
+        this.ctx.strokeStyle = 'black';
+        this.ctx.lineWidth = 2;
 
+        this.ctx.beginPath();
+        for (let i = 0; i < this.vectors.length; i++) {
+            let x = this.vectors[i][2][0];
+            let y = this.vectors[i][2][1];
+
+            this.ctx.moveTo(
+                x * sizes[0], (y + this.vectors[i][1]) * sizes[1]);
+            this.ctx.lineTo(
+                (x + this.vectors[i][0]) * sizes[0],
+                y * sizes[1]
+            );
+            this.ctx.stroke();
+        }
+        this.ctx.closePath();
 
         return 1;
     }
