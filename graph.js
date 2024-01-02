@@ -31,13 +31,13 @@ function Graph(id) {
         for (let i = this.yRange[0]; i < this.yRange[1] + 1; i++) {
             this.ctx.beginPath();
             this.ctx.moveTo(0, i * sizes[1]);
-            this.ctx.lineTo(this.canvas.height, i * sizes[1]);
+            this.ctx.lineTo(this.canvas.width, i * sizes[1]);
             this.ctx.stroke();
             this.ctx.closePath();
         }
 
         // draw vectors
-        
+
 
         return 1;
     }
