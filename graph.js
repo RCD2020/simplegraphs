@@ -58,26 +58,28 @@ function Graph(id) {
     }
 
     this.addVector = function(x, y, start, label) {
-        let xVec = (start[0], start[0] + x);
-        let yVec = (start[1], start[1] + y);
+        let xVec = [start[0], start[0] + x];
+        let yVec = [start[1], start[1] + y];
+        console.log(xVec);
+        console.log(yVec);
 
         if (this.xRange.length == 0) {
-            this.xRange.push(Math.min(xVec));
-            this.xRange.push(Math.max(xVec));
-            this.yRange.push(Math.min(yVec));
-            this.yRange.push(Math.max(yVec));
+            this.xRange.push(Math.min(...xVec));
+            this.xRange.push(Math.max(...xVec));
+            this.yRange.push(Math.min(...yVec));
+            this.yRange.push(Math.max(...yVec));
         } else {
-            if (Math.min(xVec) < this.xRange[0]) {
-                this.xRange[0] = Math.min(xVec);
+            if (Math.min(...xVec) < this.xRange[0]) {
+                this.xRange[0] = Math.min(...xVec);
             }
-            if (Math.max(xVec) > this.xRange[1]) {
-                this.xRange[1] = Math.max(xVec);
+            if (Math.max(...xVec) > this.xRange[1]) {
+                this.xRange[1] = Math.max(...xVec);
             }
-            if (Math.min(yVec) < this.yRange[0]) {
-                this.yRange[0] = Math.min(yVec);
+            if (Math.min(...yVec) < this.yRange[0]) {
+                this.yRange[0] = Math.min(...yVec);
             }
-            if (Math.max(yVec) > this.yRange[1]) {
-                this.yRange[1] = Math.max(yVec);
+            if (Math.max(...yVec) > this.yRange[1]) {
+                this.yRange[1] = Math.max(...yVec);
             }
         }
 
