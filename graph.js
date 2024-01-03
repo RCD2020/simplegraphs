@@ -4,13 +4,14 @@ function Graph(id) {
     this.xRange = [];
     this.yRange = [];
     this.vectors = [];
-    this.blockSize = [];
+    this.xSize = NaN;
+    this.ySize = NaN;
 
     this.draw = function() {
         // if size 0 in any dimension, then throw error
         let xChange = this.xRange[1] - this.xRange[0];
         let yChange = this.yRange[1] - this.yRange[0];
-        if (xChange == 0 || yChange == 0) {
+        if (this.xRange.length == 0 || this.yRange.length == 0) {
             throw new Error('not enough data in graph');
         }
 
@@ -82,21 +83,24 @@ function Graph(id) {
                 this.yRange[1] = Math.max(...yVec);
             }
         }
+        this.generateBlockSize();
 
         this.vectors.push([x, y, start, label]);
         return 1;
     }
 
-    this.getUnitSize = function() {
+    this.generateBlockSize = function() {
         let xSize = this.canvas.width / (
             this.xRange[1] - this.xRange[0]);
         let ySize = this.canvas.height / (
             this.yRange[1] - this.yRange[0]);
 
-        return [xSize, ySize];
+        this.xSize = xSize;
+        this.ySize = ySize;
     }
 
     this.realCoords = function(x, y) {
         // TODO: normalize coords
+        
     }
 }
