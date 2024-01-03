@@ -38,6 +38,7 @@ function Graph(id) {
         this.ctx.strokeStyle = 'gray';
         this.ctx.lineWidth = .5;
 
+        // TODO: label axis
         this.ctx.beginPath();
         for (let i = this.xRange[0]; i < this.xRange[1] + 1; i++) {
             this.ctx.moveTo(i * this.xSize, 0);
@@ -65,6 +66,8 @@ function Graph(id) {
             this.ctx.moveTo(...start);
             this.ctx.lineTo(...end);
             this.ctx.stroke();
+
+            // TODO: draw arrows
         }
         this.ctx.closePath();
 
