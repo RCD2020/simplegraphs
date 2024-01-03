@@ -1,9 +1,10 @@
 function Graph(id) {
     this.canvas = document.getElementById(id);
     this.ctx = this.canvas.getContext('2d');
-    this.xRange = [0,0];
-    this.yRange = [0,0];
+    this.xRange = [];
+    this.yRange = [];
     this.vectors = [];
+    this.blockSize = [];
 
     this.draw = function() {
         // if size 0 in any dimension, then throw error
@@ -60,17 +61,24 @@ function Graph(id) {
         let xVec = (start[0], start[0] + x);
         let yVec = (start[1], start[1] + y);
 
-        if (Math.min(xVec) < this.xRange[0]) {
-            this.xRange[0] = Math.min(xVec);
-        }
-        if (Math.max(xVec) > this.xRange[1]) {
-            this.xRange[1] = Math.max(xVec);
-        }
-        if (Math.min(yVec) < this.yRange[0]) {
-            this.yRange[0] = Math.min(yVec);
-        }
-        if (Math.max(yVec) > this.yRange[1]) {
-            this.yRange[1] = Math.max(yVec);
+        if (this.xRange.length == 0) {
+            this.xRange.push(Math.min(xVec));
+            this.xRange.push(Math.max(xVec));
+            this.yRange.push(Math.min(yVec));
+            this.yRange.push(Math.max(yVec));
+        } else {
+            if (Math.min(xVec) < this.xRange[0]) {
+                this.xRange[0] = Math.min(xVec);
+            }
+            if (Math.max(xVec) > this.xRange[1]) {
+                this.xRange[1] = Math.max(xVec);
+            }
+            if (Math.min(yVec) < this.yRange[0]) {
+                this.yRange[0] = Math.min(yVec);
+            }
+            if (Math.max(yVec) > this.yRange[1]) {
+                this.yRange[1] = Math.max(yVec);
+            }
         }
 
         this.vectors.push([x, y, start, label]);
@@ -84,5 +92,9 @@ function Graph(id) {
             this.yRange[1] - this.yRange[0]);
 
         return [xSize, ySize];
+    }
+
+    this.realCoords = function(x, y) {
+        // TODO: normalize coords
     }
 }
