@@ -8,6 +8,14 @@ function Vector(movement, start, label, color='black') {
     
     this.label = label;
     this.color = color;
+
+    this.packageCoords = function() {
+        // [[start], [end]]
+        return [
+            [this.x1, this.y1],
+            [this.x2, this.y2]
+        ]
+    }
 }
 
 
@@ -45,24 +53,20 @@ function Graph(id) {
         this.ctx.closePath();
 
         // draw vectors
-        // this.ctx.strokeStyle = 'black';
-        // this.ctx.lineWidth = 2;
+        this.ctx.strokeStyle = 'black';
+        this.ctx.lineWidth = 2;
 
-        // this.ctx.beginPath();
-        // for (let i = 0; i < this.vectors.length; i++) {
-        //     let x1 = this.getDrawCoord(this.vectors[i][2][0]);
-        //     let x2 = this.getDrawCoord(this.vectors[i][2][0] + );
-        //     let y1 = this.getDrawCoord(this.vectors[i][2][1], false);
+        this.ctx.beginPath();
+        for (let i = 0; i < this.vectors.length; i++) {
+            let coords = this.vectors[i].packageCoords();
+            let start = this.getDrawCoords(coords[0]);
+            let end = this.getDrawCoords(coords[1]);
 
-        //     this.ctx.moveTo(
-        //         x * sizes[0], (y + this.vectors[i][1]) * sizes[1]);
-        //     this.ctx.lineTo(
-        //         (x + this.vectors[i][0]) * sizes[0],
-        //         y * sizes[1]
-        //     );
-        //     this.ctx.stroke();
-        // }
-        // this.ctx.closePath();
+            this.ctx.moveTo(...start);
+            this.ctx.lineTo(...end);
+            this.ctx.stroke();
+        }
+        this.ctx.closePath();
 
         return 1;
     }
@@ -115,15 +119,10 @@ function Graph(id) {
         this.ySize = ySize;
     }
 
-    this.getDrawCoord = function(coord, isX = true) {
-        if (isX) {
-            let coord1 = coord - xRange[0];
-            coord1 *= this.xSize;
-        } else {
-            let coord1 = coord - yRange[0];
-            coord1 *= this.ySize;
-        }
-
-        return coord
+    this.getDrawCoords = function(coords) {
+        return [
+            this.xSize * (coords[0] - this.xRange[0]),
+            this.canvas.height - this.ySize * (coords[1] - this.yRange[0])
+        ]
     }
 }
