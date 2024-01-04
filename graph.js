@@ -32,6 +32,7 @@ function Graph(id) {
     this.vectors = [];
     this.xSize = NaN;
     this.ySize = NaN;
+    this.stretch = NaN;
 
     this.draw = function() {
         // if bounds not set, then throw error
@@ -77,7 +78,20 @@ function Graph(id) {
             // draw arrow
             this.ctx.beginPath();
             // adjust angle
-            let newAngle = this.vectors[i].angle - .25;
+            let newAngle = this.vectors[i].angle - .25 + this.stretch;
+            if (
+                (
+                    this.vectors[i].vecX < 0
+                    && this.vectors[i].vecY > 0
+                )
+                || (
+                    this.vectors[i].vecX > 0
+                    && this.vectors[i].vecY < 0
+                )
+            ) {
+                newAngle -= this.stretch * 2;
+            }
+            
             let xArrow = Math.cos(newAngle) * 25;
             let yArrow = Math.sin(newAngle) * 25;
             this.ctx.lineTo(end[0] - xArrow, end[1] + yArrow);
@@ -142,6 +156,9 @@ function Graph(id) {
 
         this.xSize = xSize;
         this.ySize = ySize;
+
+        this.stretch = Math.atan(
+            this.ySize / this.xSize) - 45 * (Math.PI / 180);
     }
 
     this.getDrawCoords = function(coords) {
