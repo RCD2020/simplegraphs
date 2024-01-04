@@ -1,3 +1,12 @@
+function Label(text, pos, color='black', size=15) {
+    this.pos = pos;
+
+    this.text = text;
+    this.color = color;
+    this.size = size;
+}
+
+
 function Vector(movement, start, label, color='black') {
     this.x1 = start[0];
     this.y1 = start[1];
@@ -6,8 +15,27 @@ function Vector(movement, start, label, color='black') {
     this.x2 = this.x1 + this.vecX;
     this.y2 = this.y1 + this.vecY;
     
-    this.label = label;
     this.color = color;
+
+    if (typeof(label) == 'string') {
+        let angle = Math.atan(this.vecY / this.vecX);
+        if (this.vecX < 0 == this.vecY < 0) {
+            angle += 270 * (Math.PI / 180);
+        } else {
+            angle += 90 * (Math.PI / 180);
+        }
+        let xlabadj = Math.cos(angle) * .1;
+        let ylabadj = Math.sin(angle) * .1;
+
+        this.label = new Label(
+            label, [
+                this.x1 + this.vecX / 2 + xlabadj,
+                this.y1 + this.vecY / 2 + ylabadj
+            ]
+        );
+    } else {
+        this.label = label;
+    }
 
     this.packageCoords = function() {
         // [[start], [end]]
@@ -27,6 +55,7 @@ function Graph(id) {
     this.vectors = [];
     this.xSize = NaN;
     this.ySize = NaN;
+    this.labels = [];
 
     this.draw = function() {
         // if bounds not set, then throw error
@@ -91,6 +120,17 @@ function Graph(id) {
             this.ctx.stroke();
             this.ctx.fill();
             this.ctx.closePath();
+
+            // label vector
+            this.ctx.beginPath();
+            this.ctx.font = this.vectors[i].label.size + 'px Arial';
+
+            this.ctx.fillText(
+                this.vectors[i].label.text,
+                ...this.getDrawCoords(this.vectors[i].label.pos)
+            );
+
+            this.ctx.closePath();
         }
 
         return 1;
@@ -149,5 +189,9 @@ function Graph(id) {
             this.xSize * (coords[0] - this.xRange[0]),
             this.canvas.height - this.ySize * (coords[1] - this.yRange[0])
         ]
+    }
+
+    this.pushLabel = function(label) {
+        this.labels.push(label);
     }
 }
