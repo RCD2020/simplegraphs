@@ -5,6 +5,11 @@ function Vector(movement, start, label, color='black') {
     this.vecY = movement[1];
     this.x2 = this.x1 + this.vecX;
     this.y2 = this.y1 + this.vecY;
+
+    this.angle = Math.atan(this.vecY / this.vecX);
+    if (this.vecX < 0) {
+        this.angle += Math.PI;
+    }
     
     this.label = label;
     this.color = color;
@@ -57,19 +62,36 @@ function Graph(id) {
         this.ctx.strokeStyle = 'black';
         this.ctx.lineWidth = 2;
 
-        this.ctx.beginPath();
         for (let i = 0; i < this.vectors.length; i++) {
+            this.ctx.beginPath();
             let coords = this.vectors[i].packageCoords();
             let start = this.getDrawCoords(coords[0]);
             let end = this.getDrawCoords(coords[1]);
 
+            // draw vector line
             this.ctx.moveTo(...start);
             this.ctx.lineTo(...end);
             this.ctx.stroke();
+            this.ctx.closePath();
 
-            // TODO: draw arrows
+            // draw arrow
+            this.ctx.beginPath();
+            // adjust angle
+            let newAngle = this.vectors[i].angle - .25;
+            let xArrow = Math.cos(newAngle) * 25;
+            let yArrow = Math.sin(newAngle) * 25;
+            this.ctx.lineTo(end[0] - xArrow, end[1] + yArrow);
+
+            newAngle += .5;
+            xArrow = Math.cos(newAngle) * 25;
+            yArrow = Math.sin(newAngle) * 25;
+            this.ctx.lineTo(end[0] - xArrow, end[1] + yArrow);
+
+            this.ctx.lineTo(...end);
+            this.ctx.stroke();
+            this.ctx.fill();
+            this.ctx.closePath();
         }
-        this.ctx.closePath();
 
         return 1;
     }
